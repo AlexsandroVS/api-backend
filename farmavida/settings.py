@@ -1,10 +1,12 @@
 
 import os
 from pathlib import Path
-import dj_database_url
+import dj_database_url # type: ignore
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+print(BASE_DIR)
+
 
 
 
@@ -22,6 +24,7 @@ if RENDER_EXTERNAL_HOSTNAME:
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
@@ -126,14 +129,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
-# This production code might break development mode, so we check whether we're in DEBUG mode
-if not DEBUG:    # Tell Django to copy static assets into a path called `staticfiles` (this is specific to Render)
+STATIC_URL = '/static/'
+
+if not DEBUG: 
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-    # Enable the WhiteNoise storage backend, which compresses static files to reduce disk use
-    # and renames the files with unique names for each version to support long-term caching
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-    
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -154,4 +155,4 @@ REST_FRAMEWORK = {
     ),
 }
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Ajusta esto según la estructura de tu proyecto
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
